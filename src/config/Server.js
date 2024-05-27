@@ -23,14 +23,19 @@ server.use("/api/v1/test", routeTest);
 //end region test-routes
 
 //region courses-routes
-const routeUsers = require("../routes/Course.routes");
-server.use("/api/v1/courses", routeUsers);
+const routeCourses = require("../routes/Course.routes");
+server.use("/api/v1/courses", routeCourses);
 //end region courses-routes
 
 //region auth-routes
 const authRoutes = require("../routes/Auth.routes");
 server.use("/api/v1/auth", authRoutes);
 //end region auth-routes
+
+//region users-routes
+const usersRoutes = require("../routes/User.routes");
+server.use("/api/v1/users", usersRoutes);
+//end region users-routes
 
 server.listen(port, () => {
   console.log(
