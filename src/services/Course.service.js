@@ -101,7 +101,9 @@ async function uploadFileMaterialTopic(id) {
         );
 
         if (!resultUpdated) {
-          return errorResponse(500, "Error upload file", { error: "File no upload" });
+          return errorResponse(500, "Error upload file", {
+            error: "File no upload",
+          });
         }
 
         return successResponse(201, "Success", 1, resultRegister);
@@ -109,6 +111,29 @@ async function uploadFileMaterialTopic(id) {
       .catch((error) => {
         console.error("Error uploading image:", error);
       });
+  } catch (error) {
+    const validationErrors = handleValidationErrors(error);
+    return errorResponse(400, "Validation Error", validationErrors);
+  }
+}
+
+async function findTopicByIdWithMaterials(id) {
+  try {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return errorResponse(400, "Bad request", {
+        error: "Invalid Id Provided",
+      });
+    }
+
+    const queryTopic = await TopicSchema.findById(id).populate({
+      path: "topic_material",
+      model: MaterialTopicSchema,
+    });
+
+    if (!queryTopic) {
+      return successResponse(404, "Not found", 0);
+    }
+    return successResponse(200, "Success", 1, queryTopic);
   } catch (error) {
     const validationErrors = handleValidationErrors(error);
     return errorResponse(400, "Validation Error", validationErrors);
@@ -194,5 +219,6 @@ module.exports = {
   updateCourseById,
   registerTopicCourse,
   registerMaterialTopic,
-  uploadFileMaterialTopic
+  uploadFileMaterialTopic,
+  findTopicByIdWithMaterials
 };

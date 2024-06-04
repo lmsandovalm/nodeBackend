@@ -7,6 +7,7 @@ const {
   registerTopicCourse,
   registerMaterialTopic,
   uploadFileMaterialTopic,
+  findTopicByIdWithMaterials
 } = require("../services/Course.service");
 
 const getAllCoursesController = async (req, res) => {
@@ -61,6 +62,15 @@ const findCourseByIdController = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+const findTopicByIdWithMaterialsController = async (req, res) => {
+  try {
+    const resultService = await findTopicByIdWithMaterials(req.params.id);
+    res.status(resultService.statusCode).json(resultService);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 const deleteCourseByIdController = async (req, res) => {
   try {
     const resultService = await deleteCourseById(req.params.id);
@@ -87,4 +97,5 @@ module.exports = {
   registerTopicCourseController,
   registerMaterialTopicCourseController,
   uploadFileMaterialTopicController,
+  findTopicByIdWithMaterialsController
 };
