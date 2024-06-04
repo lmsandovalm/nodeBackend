@@ -77,7 +77,7 @@ async function findTopicByIdWithQuestions(id) {
       });
     }
 
-    const queryCourse = await TopicsCourseSchema.findById(id).populate({
+    const queryCourse = await TopicSchema.findById(id).populate({
       path: "movil_questions",
       populate: {
         path: "question_answers",
