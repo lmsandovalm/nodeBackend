@@ -4,6 +4,7 @@ const {
   findTopicByIdWithQuestions,
   getQuestionById,
   createQuestion,
+  createAnswerQuestion
 } = require("../services/Movil.service");
 
 const getAllQuestionsController = async (req, res) => {
