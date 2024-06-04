@@ -9,6 +9,7 @@ const QuestionMovilSchema = new Schema(
     topic: {
       type: Schema.Types.ObjectId,
       required: true,
+      ref: "TopicCourse",
     },
     question_answers: [
       {

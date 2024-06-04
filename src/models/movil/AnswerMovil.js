@@ -13,6 +13,7 @@ const AnswerMovilSchema = new Schema(
     question: {
       type: Schema.Types.ObjectId,
       required: true,
+      ref: "QuestionTopicMovil",
     },
   },
   {
