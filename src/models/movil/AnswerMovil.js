@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const AnswerSchemaMovil = new Schema(
+const AnswerMovilSchema = new Schema(
   {
     answer: {
       type: String,
@@ -17,4 +17,4 @@ const AnswerSchemaMovil = new Schema(
   }
 );
 
-module.exports = model("AnswerTopicMovil", AnswerSchemaMovil, "answers_topic_movil_coll");
+module.exports = model("AnswerTopicMovil", AnswerMovilSchema, "answers_topic_movil_coll");

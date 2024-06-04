@@ -59,10 +59,20 @@ const createQuestionController = async (req, res) => {
   }
 };
 
+const createAnswerQuestionController = async (req, res) => {
+  try {
+    const resultService = await createAnswerQuestion(req.body);
+    res.status(resultService.statusCode).json(resultService);
+  } catch (error) {
+    res.status(500).json({ error: error.mesage });
+  }
+};
+
 module.exports = {
   getAllQuestionsController,
   findTopicByIdController,
   findTopicByIdWithQuestionsController,
   getQuestionByIdController,
   createQuestionController,
+  createAnswerQuestionController
 };
