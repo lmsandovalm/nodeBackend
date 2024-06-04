@@ -77,16 +77,15 @@ async function findTopicByIdWithQuestions(id) {
       });
     }
 
-    const queryCourse = await TopicSchema.findById(id).populate(
-      {
+    const queryCourse = await TopicSchema.findById(id)
+      .populate({
         path: "movil_questions",
         model: QuestionSchema,
-      },
-      {
+      })
+      .populate({
         path: "question_answers",
         model: AnswerMovilSchema,
-      }
-    );
+      });
 
     if (!queryCourse) {
       return successResponse(404, "Not found", 0);
