@@ -16,7 +16,6 @@ server.use(express.json());
 server.use(cors());
 //end region dependences
 
-
 //region test-routes
 const routeTest = require("../routes/Test.routes");
 server.use("/api/v1/test", routeTest);
@@ -25,6 +24,11 @@ server.use("/api/v1/test", routeTest);
 //region courses-routes
 const routeCourses = require("../routes/Course.routes");
 server.use("/api/v1/courses", routeCourses);
+//end region courses-routes
+
+//region movil-routes
+const routeMovil = require("../routes/Movil.routes");
+server.use("/api/v1/movil", routeMovil);
 //end region courses-routes
 
 //region auth-routes

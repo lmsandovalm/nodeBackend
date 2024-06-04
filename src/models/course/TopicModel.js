@@ -20,6 +20,12 @@ const TopicsCourseSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: [true, "The course id is required."],
     },
+    movil_questions: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "QuestionTopicMovil",
+      },
+    ],
   },
   {
     timestamps: true,
