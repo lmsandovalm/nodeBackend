@@ -5,6 +5,8 @@ const {
   deleteCourseById,
   updateCourseById,
   registerTopicCourse,
+  registerMaterialTopic,
+  uploadFileMaterialTopic,
 } = require("../services/Course.service");
 
 const getAllCoursesController = async (req, res) => {
@@ -28,6 +30,23 @@ const registerCourseController = async (req, res) => {
 const registerTopicCourseController = async (req, res) => {
   try {
     const resultService = await registerTopicCourse(req.body);
+    res.status(resultService.statusCode).json(resultService);
+  } catch (error) {
+    res.status(500).json({ error: error.mesage });
+  }
+};
+const registerMaterialTopicCourseController = async (req, res) => {
+  try {
+    const resultService = await registerMaterialTopic(req.body);
+    res.status(resultService.statusCode).json(resultService);
+  } catch (error) {
+    res.status(500).json({ error: error.mesage });
+  }
+};
+
+const uploadFileMaterialTopicController = async (req, res) => {
+  try {
+    const resultService = await uploadFileMaterialTopic(req.body);
     res.status(resultService.statusCode).json(resultService);
   } catch (error) {
     res.status(500).json({ error: error.mesage });
@@ -65,5 +84,7 @@ module.exports = {
   findCourseByIdController,
   deleteCourseByIdController,
   updateCourseByIdController,
-  registerTopicCourseController
+  registerTopicCourseController,
+  registerMaterialTopicCourseController,
+  uploadFileMaterialTopicController,
 };

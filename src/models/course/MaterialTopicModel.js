@@ -10,9 +10,11 @@ const MaterialTopicSchema = new Schema(
       type: String,
     },
 
-    material_source: {
-      type: String,
-    },
+    material_source: [
+      {
+        type: String,
+      },
+    ],
 
     material_topic: {
       type: Schema.Types.ObjectId,

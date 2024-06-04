@@ -1,5 +1,8 @@
 const CourseSchema = require("../models/course/CourseModel");
 const TopicSchema = require("../models/course/TopicModel");
+const MaterialTopicSchema = require("../models/course/MaterialTopicModel");
+const { uploadImage } = require("../helpers/uploadMulterFile"); // Assuming the file is in the same directory
+
 const {
   successResponse,
   errorResponse,
@@ -57,6 +60,65 @@ async function registerTopicCourse(data) {
   }
 }
 
+async function registerMaterialTopic(data) {
+  try {
+    const { topic } = data;
+    if (!topic || !mongoose.Types.ObjectId.isValid(topic)) {
+      return errorResponse(400, "Bad request", {
+        error: "Invalid course id provided",
+      });
+    }
+
+    const newMaterial = new MaterialTopicSchema(data);
+    const resultRegister = newMaterial.save();
+
+    const resultUpdated = await TopicSchema.findOneAndUpdate(
+      { _id: topic },
+      { $push: { topic_material: resultRegister._id } },
+      { new: true }
+    );
+
+    if (!resultUpdated) {
+      await TopicSchema.findByIdAndDelete(resultRegister._id);
+      return errorResponse(404, "Not found", { error: "Topic not found" });
+    }
+
+    return successResponse(201, "Success", 1, resultRegister);
+  } catch (error) {
+    const validationErrors = handleValidationErrors(error);
+    return errorResponse(400, "Validation Error", validationErrors);
+  }
+}
+
+async function uploadFileMaterialTopic(id) {
+  try {
+    const folderName = "material-topic";
+
+    uploadImage(req, res, folderName)
+      .then((response) => {
+        const displayURL = response.url;
+        console.log("Image uploaded successfully:", displayURL);
+
+        const resultUpdated = MaterialTopicSchema.findOneAndUpdate(
+          { _id: id },
+          { $push: { material_source: displayURL } },
+          { new: true }
+        );
+
+        if (!resultUpdated) {
+          return errorResponse(500, "Error upload file", { error: "File no upload" });
+        }
+
+        return successResponse(201, "Success", 1, resultRegister);
+      })
+      .catch((error) => {
+        console.error("Error uploading image:", error);
+      });
+  } catch (error) {
+    const validationErrors = handleValidationErrors(error);
+    return errorResponse(400, "Validation Error", validationErrors);
+  }
+}
 
 async function findCourseById(id) {
   try {
@@ -136,4 +198,6 @@ module.exports = {
   deleteCourseById,
   updateCourseById,
   registerTopicCourse,
+  registerMaterialTopic,
+  uploadFileMaterialTopic
 };
