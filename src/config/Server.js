@@ -16,6 +16,11 @@ server.use(express.json());
 server.use(cors());
 //end region dependences
 
+//region LearningStyle-routes
+const learningStyleTest = require("../routes/LearningStyle.routes");
+server.use("/api/v1/learningStyle", learningStyleTest);
+//end region LearningStyle-routes
+
 //region test-routes
 const routeTest = require("../routes/Test.routes");
 server.use("/api/v1/test", routeTest);
