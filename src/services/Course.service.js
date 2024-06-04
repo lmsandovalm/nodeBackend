@@ -78,12 +78,7 @@ async function registerMaterialTopic(data) {
       { new: true }
     );
 
-    if (!resultUpdated) {
-      await TopicSchema.findByIdAndDelete(resultRegister._id);
-      return errorResponse(404, "Not found", { error: "Topic not found" });
-    }
-
-    return successResponse(201, "Success", 1, resultRegister);
+    return successResponse(201, "Success", 1, resultUpdated);
   } catch (error) {
     const validationErrors = handleValidationErrors(error);
     return errorResponse(400, "Validation Error", validationErrors);
