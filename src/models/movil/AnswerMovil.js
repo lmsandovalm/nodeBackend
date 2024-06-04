@@ -10,6 +10,10 @@ const AnswerMovilSchema = new Schema(
       type: Boolean,
       required: [true, "The is correct answer is required."],
     },
+    question: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
   },
   {
     timestamps: true,
@@ -17,4 +21,8 @@ const AnswerMovilSchema = new Schema(
   }
 );
 
-module.exports = model("AnswerTopicMovil", AnswerMovilSchema, "answers_topic_movil_coll");
+module.exports = model(
+  "AnswerTopicMovil",
+  AnswerMovilSchema,
+  "answers_topic_movil_coll"
+);
