@@ -19,7 +19,7 @@ const getAllQuestionsController = async (req, res) => {
 
 const findTopicByIdController = async (req, res) => {
   try {
-    const resultService = await findTopicById();
+    const resultService = await findTopicById(req.params.id);
     res.status(resultService.statusCode).json(resultService);
   } catch (error) {
     res.statusCode(500).json({
@@ -30,7 +30,7 @@ const findTopicByIdController = async (req, res) => {
 
 const findTopicByIdWithQuestionsController = async (req, res) => {
   try {
-    const resultService = await findTopicByIdWithQuestions();
+    const resultService = await findTopicByIdWithQuestions(req.params.id);
     res.status(resultService.statusCode).json(resultService);
   } catch (error) {
     res.statusCode(500).json({
@@ -41,7 +41,7 @@ const findTopicByIdWithQuestionsController = async (req, res) => {
 
 const getQuestionByIdController = async (req, res) => {
   try {
-    const resultService = await getQuestionById();
+    const resultService = await getQuestionById(req.params.id);
     res.status(resultService.statusCode).json(resultService);
   } catch (error) {
     res.statusCode(500).json({
