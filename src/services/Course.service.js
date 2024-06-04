@@ -62,8 +62,8 @@ async function registerTopicCourse(data) {
 
 async function registerMaterialTopic(data) {
   try {
-    const { topic } = data;
-    if (!topic || !mongoose.Types.ObjectId.isValid(topic)) {
+    const { material_topic } = data;
+    if (!material_topic || !mongoose.Types.ObjectId.isValid(material_topic)) {
       return errorResponse(400, "Bad request", {
         error: "Invalid course id provided",
       });
@@ -73,7 +73,7 @@ async function registerMaterialTopic(data) {
     const resultRegister = newMaterial.save();
 
     const resultUpdated = await TopicSchema.findOneAndUpdate(
-      { _id: topic },
+      { _id: material_topic },
       { $push: { topic_material: resultRegister._id } },
       { new: true }
     );
