@@ -26,6 +26,9 @@ const UserSchema = new Schema(
       ref: "role",
       type: Schema.Types.ObjectId,
     },
+    imageProfile: {
+      type: String,
+    },
   },
   {
     timestamps: true,

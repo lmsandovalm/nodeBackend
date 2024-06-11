@@ -7,8 +7,9 @@ const {
   registerTopicCourse,
   registerMaterialTopic,
   uploadFileMaterialTopic,
-  findTopicByIdWithMaterials
+  findTopicByIdWithMaterials,
 } = require("../services/Course.service");
+const { uploadSigleFile } = require("../helpers/uploadMulterFile");
 
 const getAllCoursesController = async (req, res) => {
   try {
@@ -47,10 +48,20 @@ const registerMaterialTopicCourseController = async (req, res) => {
 
 const uploadFileMaterialTopicController = async (req, res) => {
   try {
-    const resultService = await uploadFileMaterialTopic(req.body);
-    res.status(resultService.statusCode).json(resultService);
+    const result = await uploadSigleFile(req, res);
+    if (result.status === 201) {
+      const resultService = await uploadFileMaterialTopic(
+        req.params.idMaterial,
+        result.url
+      );
+      res.status(resultService.statusCode).json(resultService);
+    } else {
+      res.status(500).json({
+        error: "Ocurrio un error intentando subir el material a la tematica",
+      });
+    }
   } catch (error) {
-    res.status(500).json({ error: error.mesage });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -97,5 +108,5 @@ module.exports = {
   registerTopicCourseController,
   registerMaterialTopicCourseController,
   uploadFileMaterialTopicController,
-  findTopicByIdWithMaterialsController
+  findTopicByIdWithMaterialsController,
 };

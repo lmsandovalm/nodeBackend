@@ -1,7 +1,6 @@
 const CourseSchema = require("../models/course/CourseModel");
 const TopicSchema = require("../models/course/TopicModel");
 const MaterialTopicSchema = require("../models/course/MaterialTopicModel");
-const { uploadImage } = require("../helpers/uploadMulterFile"); // Assuming the file is in the same directory
 
 const {
   successResponse,
@@ -62,21 +61,30 @@ async function registerTopicCourse(data) {
 
 async function registerMaterialTopic(data) {
   try {
-    const { material_topic } = data;
-    if (!material_topic || !mongoose.Types.ObjectId.isValid(material_topic)) {
+    const { idTopic } = data;
+    console.log("idTopic", idTopic);
+    if (!idTopic || !mongoose.Types.ObjectId.isValid(idTopic)) {
       return errorResponse(400, "Bad request", {
         error: "Invalid course id provided",
       });
     }
 
+    // Crear nuevo material y guardarlo
     const newMaterial = new MaterialTopicSchema(data);
-    const resultRegister = newMaterial.save();
+    const resultRegister = await newMaterial.save();
 
+    // Actualizar el array topic_material en TopicCourse
     const resultUpdated = await TopicSchema.findOneAndUpdate(
-      { _id: material_topic },
+      { _id: idTopic },
       { $push: { topic_material: resultRegister._id } },
       { new: true }
     );
+
+    if (!resultUpdated) {
+      return errorResponse(500, "Error updating topic", {
+        error: "The topic was not updated with the new material",
+      });
+    }
 
     return successResponse(201, "Success", 1, resultUpdated);
   } catch (error) {
@@ -85,32 +93,33 @@ async function registerMaterialTopic(data) {
   }
 }
 
-async function uploadFileMaterialTopic(id) {
+
+async function uploadFileMaterialTopic(id, urlMaterial) {
   try {
-    const folderName = "material-topic";
-
-    uploadImage(req, res, folderName)
-      .then((response) => {
-        const displayURL = response.url;
-        console.log("Image uploaded successfully:", displayURL);
-
-        const resultUpdated = MaterialTopicSchema.findOneAndUpdate(
-          { _id: id },
-          { $push: { material_source: displayURL } },
-          { new: true }
-        );
-
-        if (!resultUpdated) {
-          return errorResponse(500, "Error upload file", {
-            error: "File no upload",
-          });
-        }
-
-        return successResponse(201, "Success", 1, resultRegister);
-      })
-      .catch((error) => {
-        console.error("Error uploading image:", error);
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return errorResponse(400, "Bad request", {
+        error: "Invalid Id provided",
       });
+    }
+
+    const resultUpdated = await MaterialTopicSchema.findOneAndUpdate(
+      { _id: id },
+      { $push: { material_source: urlMaterial } },
+      { new: true }
+    );
+
+    if (!resultUpdated) {
+      return errorResponse(500, "Error upload file", {
+        error: "File no upload",
+      });
+    }
+    // await TopicSchema.findOneAndUpdate(
+    //   { _id: material_topic },
+    //   { $push: { topic_material: resultRegister._id } },
+    //   { new: true }
+    // );
+
+    return successResponse(201, "Success", 1, resultUpdated);
   } catch (error) {
     const validationErrors = handleValidationErrors(error);
     return errorResponse(400, "Validation Error", validationErrors);
@@ -135,6 +144,7 @@ async function findTopicByIdWithMaterials(id) {
     }
     return successResponse(200, "Success", 1, queryTopic);
   } catch (error) {
+    console.log(error);
     const validationErrors = handleValidationErrors(error);
     return errorResponse(400, "Validation Error", validationErrors);
   }
@@ -220,5 +230,5 @@ module.exports = {
   registerTopicCourse,
   registerMaterialTopic,
   uploadFileMaterialTopic,
-  findTopicByIdWithMaterials
+  findTopicByIdWithMaterials,
 };

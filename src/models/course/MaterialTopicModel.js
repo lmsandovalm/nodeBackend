@@ -9,20 +9,18 @@ const MaterialTopicSchema = new Schema(
     material_description: {
       type: String,
     },
-
     material_source: [
       {
         type: String,
       },
     ],
-
     material_topic: {
       type: Schema.Types.ObjectId,
       ref: "TopicCourse",
-      required: [true, "The topic id is required."],
     },
     material_style: {
       type: Schema.Types.ObjectId,
+      ref: "LearningStyle",
       required: [true, "The learning style id is required."],
     },
   },

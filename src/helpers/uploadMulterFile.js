@@ -1,46 +1,55 @@
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
-const uploadImage = async (req, res, folderName) => {
-  try {
-    // Configure Multer with the specified upload directory
-    const upload = multer({ dest: `./uploads/${folderName}` });
+// Configuración de multer con almacenamiento
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const folderName = req.params.folderName; // Se obtiene el nombre de la carpeta de los parámetros de la ruta
+    const uploadPath = path.join(__dirname, "../uploads", folderName);
 
-    // Apply Multer middleware to the file upload route
-    upload.single("file")(req, res, async (err) => {
+    // Crear la carpeta si no existe
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
+
+const uploadSigleFile = (req, res) => {
+  return new Promise((resolve, reject) => {
+    upload.single("file")(req, res, (err) => {
       if (err) {
         console.error(err);
-        return res.status(500).json({ message: "Error uploading file" });
+        return reject({ status: 500, message: "Error uploading file" });
       }
 
       if (!req.file) {
-        return res.status(400).json({ message: "No file uploaded" });
+        return reject({ status: 400, message: "No file uploaded" });
       }
 
-      // Extract file details
-      const filePath = req.file.path;
-      const fileName = req.file.filename;
-      const fileExtension = path.extname(fileName);
+      // Obtener el esquema, host y puerto del servidor
+      const protocol = req.protocol;
+      const host = req.get("host");
 
-      // Generate unique filename (optional)
-      const uniqueFileName = `${Date.now()}${fileExtension}`;
+      // Construir la URL de visualización completa
+      const displayURL = `${protocol}://${host}/uploads/${req.params.folderName}/${req.file.filename}`;
 
-      // Move the uploaded file to the specified folder with the unique filename
-      await fs.renameSync(
-        filePath,
-        `./uploads/${folderName}/${uniqueFileName}`
-      );
-
-      // Construct the display URL
-      const displayURL = `/uploads/${folderName}/${uniqueFileName}`;
-
-      // Return the display URL
-      res.json({ message: "File uploaded successfully", url: displayURL });
+      // Devolver la URL de visualización
+      resolve({
+        status: 201,
+        message: "File uploaded successfully",
+        url: displayURL,
+      });
     });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error uploading file" });
-  }
+  });
 };
 
-module.exports = { uploadImage };
+module.exports = { uploadSigleFile };

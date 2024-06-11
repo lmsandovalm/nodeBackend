@@ -3,6 +3,8 @@ const cors = require("cors");
 const express = require("express");
 const server = express();
 const routes = express.Router();
+const path = require("path");
+
 
 const morgan = require("morgan");
 const port = process.env.PORT || 3000;
@@ -45,6 +47,17 @@ server.use("/api/v1/auth", authRoutes);
 const usersRoutes = require("../routes/User.routes");
 server.use("/api/v1/users", usersRoutes);
 //end region users-routes
+
+//region ranking-routes
+const rankingRoutes = require("../routes/Ranking.routes");
+server.use("/api/v1/ranking", rankingRoutes);
+//end region ranking-routes
+
+server.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+//////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
 
 server.listen(port, () => {
   console.log(

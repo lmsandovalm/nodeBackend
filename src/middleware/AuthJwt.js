@@ -25,7 +25,7 @@ async function verifyToken(req, res, next) {
       const response = errorResponse(404, "Not found", "User not found");
       return res.status(404).json(response);
     }
-   
+
     const {name_role} = userFound.role
     if(name_role==='admin'){
       next();

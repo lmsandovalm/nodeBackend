@@ -36,4 +36,29 @@ const findUserById = async (id) => {
   }
 };
 
-module.exports = { findUserById, getUsers };
+async function updateUserById(idUser, data) {
+  try {
+    if (!idUser || !mongoose.Types.ObjectId.isValid(idUser)) {
+      return errorResponse(400, "Bad request", {
+        error: "Invalid Id provided",
+      });
+    }
+    const imageUpdated = await UserSchema.findOneAndUpdate(
+      { _id: idUser },
+      { $set: data },
+      { new: true }
+    );
+
+    if (!imageUpdated) {
+      return errorResponse(500, "Error upload file", {
+        error: "File no upload",
+      });
+    }
+
+    return successResponse(201, "Success", 1, imageUpdated);
+  } catch (error) {
+    const validationErrors = handleValidationErrors(error);
+    return errorResponse(400, "Validation Error", validationErrors);
+  }
+}
+module.exports = { findUserById, getUsers, updateUserById };
