@@ -22,15 +22,12 @@ routes.get(
   "/findTopicByIdWithMaterials/:id",
   findTopicByIdWithMaterialsController
 );
-routes.post("/registerCourse", verifyToken, registerCourseController);
-routes.post("/registerTopic",verifyToken, registerTopicCourseController);
-routes.post("/registerMaterialTopic",verifyToken, registerMaterialTopicCourseController);
-routes.post(
-  "/uploadFileMaterialTopic/:idMaterial/:folderName",verifyToken,
-  uploadFileMaterialTopicController
-);
-routes.delete("/delete/:id", verifyToken, deleteCourseByIdController);
-routes.patch("/update/:id", verifyToken, updateCourseByIdController);
+routes.post("/registerCourse",  registerCourseController);
+routes.post("/registerTopic", registerTopicCourseController);
+routes.post("/registerMaterialTopic", registerMaterialTopicCourseController);
+routes.post("/uploadFileMaterialTopic/:idMaterial/:folderName", uploadFileMaterialTopicController);
+routes.delete("/delete/:id",  deleteCourseByIdController);
+routes.patch("/update/:id",  updateCourseByIdController);
 //! end general routes
 
 module.exports = routes;
