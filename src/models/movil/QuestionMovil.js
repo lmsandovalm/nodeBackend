@@ -2,6 +2,10 @@ const { Schema, model } = require("mongoose");
 
 const QuestionMovilSchema = new Schema(
   {
+    description_text: {
+      type: String,
+      required: true,
+    },
     question_text: {
       type: String,
       required: true,
