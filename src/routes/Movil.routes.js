@@ -17,7 +17,7 @@ routes.get("/", getAllQuestionsController);
 routes.get("/findTopic/:id", findTopicByIdController);
 routes.get("/findTopicByIdWithQuestions/:id", findTopicByIdWithQuestionsController);
 routes.get("/findQuestion/:id",  getQuestionByIdController);
-routes.post("/createQuestion", verifyToken, createQuestionController);
-routes.post("/createAnswerQuestion", verifyToken, createAnswerQuestionController);
+routes.post("/createQuestion", createQuestionController);
+routes.post("/createAnswerQuestion", createAnswerQuestionController);
 
 module.exports = routes;
