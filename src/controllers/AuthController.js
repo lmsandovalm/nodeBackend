@@ -1,4 +1,4 @@
-const { login, register } = require("../services/Auth.service");
+const { login, register, logout } = require("../services/Auth.service");
 
 async function loginController(req, res, next) {
   try {
@@ -19,4 +19,17 @@ async function registerController(req, res, next) {
   }
 }
 
-module.exports = { loginController, registerController };
+async function logoutController(req, res, next) {
+  try {
+    const token = req.token;
+    if (!token) {
+      return res.status(400).json({ status: 400, message: 'Token not provided' });
+    }
+    const resultService = await logout(token);
+    res.status(resultService.statusCode).json(resultService);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+module.exports = { loginController, registerController, logoutController };

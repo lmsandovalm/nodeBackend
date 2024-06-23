@@ -83,4 +83,15 @@ async function register(data) {
   }
 }
 
-module.exports = { login, register };
+const tokenBlacklist = new Set();
+
+async function logout(token) {
+  try {
+    tokenBlacklist.add(token);
+    return successResponse(200, "Logout successful", 1, { message: "Token invalidated" });
+  } catch (error) {
+    return errorResponse(500, "Logout Error", error.message);
+  }
+}
+
+module.exports = { login, register, logout };
