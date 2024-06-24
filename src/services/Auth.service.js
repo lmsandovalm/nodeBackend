@@ -88,7 +88,8 @@ const tokenBlacklist = new Set();
 async function logout(token) {
   try {
     tokenBlacklist.add(token);
-    return successResponse(200, "Logout successful", 1, { message: "Token invalidated" });
+    console.log(tokenBlacklist);
+    return successResponse(200, "Logout successful", 1, { message: "Token validated" });
   } catch (error) {
     return errorResponse(500, "Logout Error", error.message);
   }

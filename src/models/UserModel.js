@@ -29,6 +29,10 @@ const UserSchema = new Schema(
     imageProfile: {
       type: String,
     },
+    test_result: {
+    ref: "LearningStyle",
+    type: Schema.Types.ObjectId,
+    }
   },
   {
     timestamps: true,

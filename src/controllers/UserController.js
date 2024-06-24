@@ -2,6 +2,7 @@ const {
   getUsers,
   findUserById,
   updateUserById,
+  postTestResult,
 } = require("../services/User.service");
 const { uploadSigleFile } = require("../helpers/uploadMulterFile");
 async function getUsersController(req, res, next) {
@@ -33,6 +34,7 @@ const updateUserByIdController = async (req, res) => {
     res.status(error.status || 500).json({ error: error.message });
   }
 };
+
 const uploadImageController = async (req, res) => {
   try {
     const result = await uploadSigleFile(req, res);
@@ -51,9 +53,20 @@ const uploadImageController = async (req, res) => {
   }
 };
 
+const postTestResultController = async (req, res) => {
+  try {
+    const { idUser, idStyle } = req.body;
+    const resultService = await postTestResult(idUser, idStyle);
+    res.status(200).json(resultService);
+  } catch (error) {
+    res.status(error.status || 500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   findUserByIdController,
   getUsersController,
   uploadImageController,
-  updateUserByIdController
+  updateUserByIdController,
+  postTestResultController,
 };

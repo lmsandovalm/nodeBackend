@@ -7,6 +7,7 @@ const {
   getUsersController,
   uploadImageController,
   updateUserByIdController,
+  postTestResultController,
 } = require("../controllers/UserController");
 
 routes.get("/", getUsersController);
@@ -14,6 +15,7 @@ routes.get("/", getUsersController);
 routes.get("/find/:id", findUserByIdController);
 routes.patch("/updateUserById/:id", updateUserByIdController);
 routes.patch("/updatePhoto/:id/:folderName", uploadImageController);
+routes.post("/postTestResult", postTestResultController);
 
 routes.post("/uploadSingleImage/:folderName", (req, res) =>
   uploadSigleFile(req, res)

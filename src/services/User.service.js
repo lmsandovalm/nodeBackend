@@ -1,4 +1,5 @@
 const UserSchema = require("../models/UserModel");
+const LearningStyleSchema = require("../models/LearningStyleModel");
 const {
   errorResponse,
   successResponse,
@@ -23,7 +24,10 @@ const findUserById = async (id) => {
       });
     }
 
-    const userFound = await UserSchema.findById(id);
+    const userFound = await UserSchema.findById(id).populate({
+      path: "test_result",
+      model: LearningStyleSchema,
+    });
 
     if (!userFound) {
       return errorResponse(404, "Not found", { error: "User Not Found" });
@@ -61,4 +65,35 @@ async function updateUserById(idUser, data) {
     return errorResponse(400, "Validation Error", validationErrors);
   }
 }
-module.exports = { findUserById, getUsers, updateUserById };
+
+async function postTestResult(idUser, idStyle) {
+  try {
+    if (
+      !idUser ||
+      !mongoose.Types.ObjectId.isValid(idUser) ||
+      !idStyle ||
+      !mongoose.Types.ObjectId.isValid(idStyle)
+    ) {
+      return errorResponse(400, "Bad request", {
+        error: "Invalid Id provided",
+      });
+    }
+    let userFound = await UserSchema.findOne({ _id: idUser });
+
+    if (!userFound) {
+      // Crear nuevo puntaje si no existe
+      userFound = new UserSchema({ _id: idUser, test_result: idStyle });
+    } else {
+      // Actualizar puntaje
+      userFound.test_result = idStyle;
+    }
+
+    await userFound.save();
+    return successResponse(200, "Resultado guardado", 1, userFound);
+  } catch (error) {
+    const validationErrors = handleValidationErrors(error);
+    return errorResponse(400, "Validation Error", validationErrors);
+  }
+}
+
+module.exports = { findUserById, getUsers, updateUserById, postTestResult };
