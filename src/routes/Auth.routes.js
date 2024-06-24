@@ -10,7 +10,7 @@ const {
 
 function extractToken(req, res, next) {
   const authHeader = req.headers['authorization'];
-  if (authHeader && authHeader.startsWith('Bearer ')) {
+  if (authHeader && authHeader.startsWith('Bearer')) {
     req.token = authHeader.substring(7, authHeader.length);
   } else {
     req.token = null;
