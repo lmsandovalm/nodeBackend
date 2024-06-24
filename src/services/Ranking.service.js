@@ -4,9 +4,8 @@ const {
   successResponse,
 } = require("../middleware/StructureResponse");
 
-async function addPointsForCorrectAnswer(userId) {
+async function addPointsUser(userId, points) {
   try {
-    const points = 5;
     let userScore = await RankingSchema.findOne({ user: userId });
 
     if (!userScore) {
@@ -49,7 +48,7 @@ async function getAllUserScores() {
 }
 
 module.exports = {
-  addPointsForCorrectAnswer,
+  addPointsUser,
   getUserScore,
   getAllUserScores,
 };
