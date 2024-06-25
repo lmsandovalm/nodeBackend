@@ -190,6 +190,28 @@ async function findCourseById(id) {
   }
 }
 
+async function findTopicById(id) {
+  try {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return errorResponse(400, "Bad request", {
+        error: "Invalid Id Provided",
+      });
+    }
+
+    const queryTopic = await TopicSchema.findById(id).populate({
+      path: "topic_material",
+      model: MaterialTopicSchema,
+    });
+    if (!queryTopic) {
+      return successResponse(404, "Not found", 0);
+    }
+    return successResponse(200, "Success", 1, queryTopic);
+  } catch (error) {
+    const validationErrors = handleValidationErrors(error);
+    return errorResponse(400, "Validation Error", validationErrors);
+  }
+}
+
 const deleteCourseById = async (id) => {
   try {
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
@@ -353,4 +375,5 @@ module.exports = {
   registerMaterialTopic,
   uploadFileMaterialTopic,
   findTopicByIdWithMaterials,
+  findTopicById,
 };

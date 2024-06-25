@@ -14,6 +14,7 @@ const {
 routes.get("/", getTestController);
 routes.get("/find/:id", findTestByIdController);
 routes.post("/registerTest", registerTestController);
+
 routes.delete("/deleteTest/:id",  deleteTestByIdController);
 routes.patch("/updateTest/:id",  updateTestByIdController);
 

@@ -17,6 +17,7 @@ const {
   registerMaterialTopicCourseController,
   uploadFileMaterialTopicController,
   findTopicByIdWithMaterialsController,
+  findTopicByIdController,
 } = require("../controllers/CourseController");
 
 const { verifyToken } = require("../middleware/AuthJwt");
@@ -26,6 +27,9 @@ routes.get("/", getAllCoursesController);
 routes.get("/topics", getAllTopicsController);
 routes.get("/materialsTopics", getAllMaterialsTopicsController);
 routes.get("/find/:id", findCourseByIdController);
+
+routes.get("/findTopic/:id", findTopicByIdController);
+
 routes.get(
   "/findTopicByIdWithMaterials/:id",
   findTopicByIdWithMaterialsController
