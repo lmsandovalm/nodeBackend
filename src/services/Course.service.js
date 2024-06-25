@@ -29,6 +29,15 @@ async function registerCourse(data) {
   }
 }
 
+async function getAllTopics() {
+  try {
+    const topics = await TopicSchema.find();
+    return successResponse(200, "Success", topics.length, topics);
+  } catch (error) {
+    return errorResponse(500, "Internal Server Error", error);
+  }
+}
+
 async function registerTopicCourse(data) {
   try {
     const { course } = data;
@@ -90,6 +99,15 @@ async function registerMaterialTopic(data) {
   } catch (error) {
     const validationErrors = handleValidationErrors(error);
     return errorResponse(400, "Validation Error", validationErrors);
+  }
+}
+
+async function getAllMaterialsTopics() {
+  try {
+    const materials = await MaterialTopicSchema.find();
+    return successResponse(200, "Success", materials.length, materials);
+  } catch (error) {
+    return errorResponse(500, "Internal Server Error", error);
   }
 }
 
@@ -190,7 +208,47 @@ const deleteCourseById = async (id) => {
     const validationErrors = handleValidationErrors(error);
     return errorResponse(500, "Validation Error", validationErrors);
   }
-};
+}
+
+const deleteTopicById = async (id) => {
+  try {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return errorResponse(400, "Bad request", {
+        error: "Invalid id provided",
+      });
+    }
+    const queryTopic = await TopicSchema.findByIdAndDelete(id);
+
+    if (!queryTopic) {
+      return errorResponse(404, "Not found", { error: "Course not found" });
+    }
+
+    return successResponse(200, "Success", 1, []);
+  } catch (error) {
+    const validationErrors = handleValidationErrors(error);
+    return errorResponse(500, "Validation Error", validationErrors);
+  }
+}
+
+const deleteMaterialTopicsById = async (id) => {
+  try {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return errorResponse(400, "Bad request", {
+        error: "Invalid id provided",
+      });
+    }
+    const queryMaterial = await MaterialTopicSchema.findByIdAndDelete(id);
+
+    if (!queryMaterial) {
+      return errorResponse(404, "Not found", { error: "Course not found" });
+    }
+
+    return successResponse(200, "Success", 1, []);
+  } catch (error) {
+    const validationErrors = handleValidationErrors(error);
+    return errorResponse(500, "Validation Error", validationErrors);
+  }
+}
 
 const updateCourseById = async (id, update) => {
   try {
@@ -219,14 +277,78 @@ const updateCourseById = async (id, update) => {
       validationErrors
     );
   }
+}
+
+const updateTopicById = async (id, update) => {
+  try {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error(
+        "Invalid Topic ID. Please provide a valid 24-character ObjectId."
+      );
+    }
+
+    const resultUpdated = await TopicSchema.findOneAndUpdate(
+      { _id: id },
+      update,
+      { new: true }
+    );
+
+    if (!resultUpdated) {
+      return errorResponse((statusCode = 404), (message = "Topic not found"));
+    }
+
+    return successResponse(200, "Success", 1, resultUpdated);
+  } catch (error) {
+    const validationErrors = handleValidationErrors(error);
+    return errorResponse(
+      validationErrors ? 400 : 500,
+      validationErrors ? "Validation Error" : "Internal Server Error",
+      validationErrors
+    );
+  }
+};
+
+const updateMaterialTopicById = async (id, update) => {
+  try {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error(
+        "Invalid Material Topic ID. Please provide a valid 24-character ObjectId."
+      );
+    }
+
+    const resultUpdated = await MaterialTopicSchema.findOneAndUpdate(
+      { _id: id },
+      update,
+      { new: true }
+    );
+
+    if (!resultUpdated) {
+      return errorResponse((statusCode = 404), (message = "Material Topic not found"));
+    }
+
+    return successResponse(200, "Success", 1, resultUpdated);
+  } catch (error) {
+    const validationErrors = handleValidationErrors(error);
+    return errorResponse(
+      validationErrors ? 400 : 500,
+      validationErrors ? "Validation Error" : "Internal Server Error",
+      validationErrors
+    );
+  }
 };
 
 module.exports = {
   getAllCourses,
+  getAllTopics,
+  getAllMaterialsTopics,
   registerCourse,
   findCourseById,
   deleteCourseById,
+  deleteTopicById,
+  deleteMaterialTopicsById,
   updateCourseById,
+  updateTopicById,
+  updateMaterialTopicById,
   registerTopicCourse,
   registerMaterialTopic,
   uploadFileMaterialTopic,
