@@ -61,7 +61,7 @@ async function registerAnswerQuestionTestController(req, res, next) {
 
 const deleteTestByIdController = async (req, res) => {
   try {
-    const resultService = await deleteTestByIdController(req.params.id);
+    const resultService = await deleteTestById(req.params.id);
     res.status(resultService.statusCode).json(resultService);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -70,7 +70,7 @@ const deleteTestByIdController = async (req, res) => {
 
 const updateTestByIdController = async (req, res) => {
   try {
-    const resultService = await updateTestByIdController(req.params.id, req.body);
+    const resultService = await updateTestById(req.params.id, req.body);
     res.status(resultService.statusCode).json(resultService);
   } catch (error) {
     res.status(500).json({ error: error.message });
