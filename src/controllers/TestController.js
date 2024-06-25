@@ -2,6 +2,8 @@ const {
   registerTest,
   getTest,
   findTestById,
+  updateTestById,
+  deleteTestById,
   registerQuestionTest,
   registerAnswerQuestionTest,
 } = require("../services/Test.service");
@@ -57,10 +59,30 @@ async function registerAnswerQuestionTestController(req, res, next) {
   }
 }
 
+const deleteTestByIdController = async (req, res) => {
+  try {
+    const resultService = await deleteTestByIdController(req.params.id);
+    res.status(resultService.statusCode).json(resultService);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateTestByIdController = async (req, res) => {
+  try {
+    const resultService = await updateTestByIdController(req.params.id, req.body);
+    res.status(resultService.statusCode).json(resultService);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   registerTestController,
   getTestController,
   findTestByIdController,
+  updateTestByIdController,
+  deleteTestByIdController,
   registerQuestionTestController,
   registerAnswerQuestionTestController,
 };

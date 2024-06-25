@@ -220,7 +220,7 @@ const deleteTopicById = async (id) => {
     const queryTopic = await TopicSchema.findByIdAndDelete(id);
 
     if (!queryTopic) {
-      return errorResponse(404, "Not found", { error: "Course not found" });
+      return errorResponse(404, "Not found", { error: "Topic not found" });
     }
 
     return successResponse(200, "Success", 1, []);
@@ -240,7 +240,7 @@ const deleteMaterialTopicsById = async (id) => {
     const queryMaterial = await MaterialTopicSchema.findByIdAndDelete(id);
 
     if (!queryMaterial) {
-      return errorResponse(404, "Not found", { error: "Course not found" });
+      return errorResponse(404, "Not found", { error: "Material Topic not found" });
     }
 
     return successResponse(200, "Success", 1, []);

@@ -136,10 +136,61 @@ async function registerAnswerQuestionTest(data) {
   }
 }
 
+const updateTestById = async (id, update) => {
+  try {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error(
+        "Invalid Test ID. Please provide a valid 24-character ObjectId."
+      );
+    }
+
+    const resultUpdated = await TestSchema.findOneAndUpdate(
+      { _id: id },
+      update,
+      { new: true }
+    );
+
+    if (!resultUpdated) {
+      return errorResponse((statusCode = 404), (message = "Test not found"));
+    }
+
+    return successResponse(200, "Success", 1, resultUpdated);
+  } catch (error) {
+    const validationErrors = handleValidationErrors(error);
+    return errorResponse(
+      validationErrors ? 400 : 500,
+      validationErrors ? "Validation Error" : "Internal Server Error",
+      validationErrors
+    );
+  }
+}
+
+const deleteTestById = async (id) => {
+  try {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return errorResponse(400, "Bad request", {
+        error: "Invalid id provided",
+      });
+    }
+    const queryTest = await TestSchema.findByIdAndDelete(id);
+
+    if (!queryTest) {
+      return errorResponse(404, "Not found", { error: "Test not found" });
+    }
+
+    return successResponse(200, "Success", 1, []);
+  } catch (error) {
+    const validationErrors = handleValidationErrors(error);
+    return errorResponse(500, "Validation Error", validationErrors);
+  }
+}
+
 module.exports = {
   registerTest,
   getTest,
   findTestById,
+  updateTestById,
+  deleteTestById,
   registerQuestionTest,
   registerAnswerQuestionTest,
 };
