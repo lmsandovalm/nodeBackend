@@ -40,6 +40,7 @@ async function getUserScore(userId) {
 async function getAllUserScores() {
   try {
     const allScores = await RankingSchema.find().populate('user');
+    allScores.sort((a, b) =>a.score - b.score);
 
     return successResponse(200, "All user scores retrieved successfully", allScores.length, allScores);
   } catch (error) {
