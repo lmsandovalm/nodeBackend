@@ -190,7 +190,7 @@ async function findCourseById(id) {
   }
 }
 
-async function findTopicById(id) {
+async function findMaterialTopicById(id) {
   try {
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return errorResponse(400, "Bad request", {
@@ -198,14 +198,13 @@ async function findTopicById(id) {
       });
     }
 
-    const queryTopic = await TopicSchema.findById(id).populate({
-      path: "topic_material",
-      model: MaterialTopicSchema,
-    });
-    if (!queryTopic) {
-      return successResponse(404, "Not found", 0);
+    const queryStyle = await MaterialTopicSchema.findById(id);
+    if (!queryStyle) {
+      return errorResponse(404, "Not found", {
+        error: "The Material Topic not found",
+      });
     }
-    return successResponse(200, "Success", 1, queryTopic);
+    return successResponse(200, "Success", 1, queryStyle);
   } catch (error) {
     const validationErrors = handleValidationErrors(error);
     return errorResponse(400, "Validation Error", validationErrors);
@@ -375,5 +374,5 @@ module.exports = {
   registerMaterialTopic,
   uploadFileMaterialTopic,
   findTopicByIdWithMaterials,
-  findTopicById,
+  findMaterialTopicById,
 };

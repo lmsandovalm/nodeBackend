@@ -14,7 +14,7 @@ const {
   registerMaterialTopic,
   uploadFileMaterialTopic,
   findTopicByIdWithMaterials,
-  findTopicById,
+  findMaterialTopicById,
 } = require("../services/Course.service");
 const { uploadSigleFile } = require("../helpers/uploadMulterFile");
 
@@ -106,9 +106,9 @@ const findCourseByIdController = async (req, res) => {
   }
 };
 
-const findTopicByIdController = async (req, res) => {
+const findMaterialTopicByIdController = async (req, res) => {
   try {
-    const resultService = await findTopicById(req.params.id);
+    const resultService = await findMaterialTopicById(req.params.id);
     res.status(resultService.statusCode).json(resultService);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -194,5 +194,5 @@ module.exports = {
   registerMaterialTopicCourseController,
   uploadFileMaterialTopicController,
   findTopicByIdWithMaterialsController,
-  findTopicByIdController,
+  findMaterialTopicByIdController,
 };
