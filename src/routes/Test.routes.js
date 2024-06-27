@@ -4,6 +4,7 @@ const routes = Router();
 const {
   registerTestController,
   getTestController,
+  getQuestionsTestController,
   findTestByIdController,
   updateTestByIdController,
   deleteTestByIdController,
@@ -12,6 +13,8 @@ const {
 } = require("../controllers/TestController");
 
 routes.get("/", getTestController);
+routes.get("/questions", getQuestionsTestController);
+
 routes.get("/find/:id", findTestByIdController);
 routes.post("/registerTest", registerTestController);
 

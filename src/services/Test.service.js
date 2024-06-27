@@ -35,6 +35,19 @@ async function getTest() {
   }
 }
 
+async function getQuestionsTest() {
+  try {
+    const questionResult = await QuestionTestSchema.find();
+    if (questionResult.length === 0) {
+      return errorResponse(404, "No questions found");
+    }
+
+    return successResponse(200, "Success", questionResult.length, questionResult);
+  } catch (error) {
+    return errorResponse(500, "Internal Server Error", error.message);
+  }
+}
+
 const findTestById = async (id) => {
   try {
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
@@ -189,6 +202,7 @@ const deleteTestById = async (id) => {
 module.exports = {
   registerTest,
   getTest,
+  getQuestionsTest,
   findTestById,
   updateTestById,
   deleteTestById,

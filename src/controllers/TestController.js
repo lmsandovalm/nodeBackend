@@ -1,6 +1,7 @@
 const {
   registerTest,
   getTest,
+  getQuestionsTest,
   findTestById,
   updateTestById,
   deleteTestById,
@@ -28,6 +29,18 @@ async function getTestController(req, res, next) {
     });
   }
 }
+
+async function getQuestionsTestController(req, res, next) {
+  try {
+    const resultService = await getQuestionsTest();
+    res.status(resultService.statusCode).json(resultService);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+}
+
 async function findTestByIdController(req, res, next) {
   try {
     const resultService = await findTestById(req.params.id);
@@ -80,6 +93,7 @@ const updateTestByIdController = async (req, res) => {
 module.exports = {
   registerTestController,
   getTestController,
+  getQuestionsTestController,
   findTestByIdController,
   updateTestByIdController,
   deleteTestByIdController,
